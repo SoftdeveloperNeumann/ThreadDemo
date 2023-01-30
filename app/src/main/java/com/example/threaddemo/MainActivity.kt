@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnNext.setOnClickListener {
-            startActivity(Intent(this,TaskActivity::class.java))
+//            startActivity(Intent(this,TaskActivity::class.java))
+            startActivity(Intent(this,CoroutineActivity::class.java))
         }
     }
 
