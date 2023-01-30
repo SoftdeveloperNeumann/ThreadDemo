@@ -3,7 +3,9 @@ package com.example.threaddemo
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.transition.Visibility
 import com.example.threaddemo.databinding.ActivityMainBinding
 import com.example.threaddemo.databinding.ActivityTaskBinding
 
@@ -20,7 +22,7 @@ class TaskActivity : AppCompatActivity() {
         binding.btnAction.setOnClickListener {
             MyTask().execute("Frank")
         }
-
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
     inner class MyTask: AsyncTask<String,Int,Array<String?>>(){
@@ -29,13 +31,14 @@ class TaskActivity : AppCompatActivity() {
 
         override fun onPreExecute() {
           values = werte
+            binding.progressBar.visibility = View.VISIBLE
         }
 
         override fun doInBackground(vararg params: String?): Array<String?> {
             for(i in values.indices){
                 Thread.sleep(250)
                 values[i] = params[0]
-                publishProgress(i,values.size)
+                publishProgress(i)
             }
            return values
         }
@@ -44,10 +47,15 @@ class TaskActivity : AppCompatActivity() {
             for(value in values){
                 binding.textView.append(value + "\n")
             }
+            binding.progressBar.progress = 0
+            binding.progressBar.visibility = View.INVISIBLE
         }
 
         override fun onProgressUpdate(vararg values: Int?) {
-            Toast.makeText(this@TaskActivity, "${values[0]} von ${values[1]}", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@TaskActivity, "${values[0]} von ${values[1]}", Toast.LENGTH_SHORT).show()
+
+            binding.progressBar.progress = values[0]!!
+
         }
     }
 }
